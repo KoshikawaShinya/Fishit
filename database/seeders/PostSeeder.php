@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use DateTime;
+use Faker\Generator as Faker;
 
 class PostSeeder extends Seeder
 {
@@ -14,11 +15,11 @@ class PostSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(Faker $faker)
     {
         DB::table('posts')->insert([
             'species' => '魚の種類',
-            'size' => 10.0,
+            'size' => $faker->numberBetween(10, 50),
             'place' => '場所',
             'image_path' => 'imagepath',
             'user_id' => 1,
