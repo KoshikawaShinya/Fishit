@@ -15,13 +15,7 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->float("size", 8, 2);
-            $table->string("place", 50);
-            $table->string("image_path", 100);
-            $table->integer("competition_id")->nullable();
-            $table->integer("user_id");
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
