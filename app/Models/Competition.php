@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class Competition extends Model
 {
     use HasFactory;
     public function getByLimit(int $limit_count = 10)

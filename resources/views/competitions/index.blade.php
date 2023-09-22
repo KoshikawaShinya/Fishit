@@ -13,20 +13,19 @@
         </x-slot>
     <body>
         <h1>Blog Name</h1>
-        <div class='posts'>
-            <a href='/catches/posts/create'>create</a>
-            @foreach ($posts as $post)
-                <div class='post'>
+        <div class='competitions'>
+            <a href='/competitions/create'>create</a>
+            @foreach ($competitions as $competition)
+                <div class='competition'>
                     <h2 class='species'>
-                        <a href="/catches/posts/{{ $post->id }}">{{ $post->species }}</a>
+                        <a href="/competitions/{{ $competition->id }}">{{ $competition->species }}</a>
                     </h2>
-                    <p class='size'>{{ $post->size }}cm</p>
-                    <p class='place'>{{ $post->place }}</p>
+                    <p class='size'>{{ $competition->description }}</p>
                 </div>
             @endforeach
         </div>
         <div class='paginate'>
-            {{ $posts->links() }}
+            {{ $competitions->links() }}
         </div>
     </body>
     </x-app-layout>

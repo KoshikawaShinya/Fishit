@@ -4,11 +4,11 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use DateTime;
 use Faker\Generator as Faker;
+use Illuminate\Support\Facades\DB;
 
-class PostSeeder extends Seeder
+class CompetitionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -19,12 +19,10 @@ class PostSeeder extends Seeder
     {
         $fishes_array = array('アジ', 'サンマ', 'マグロ');
         $places_array = array('東京', '千葉', '石川');
-        DB::table('posts')->insert([
-            'species' => $fishes_array[$faker->numberBetween(0,2)],
-            'size' => $faker->numberBetween(10, 50),
-            'place' => $places_array[$faker->numberBetween(0,2)],
+        DB::table('competitions')->insert([
+            'species' => $fishes_array[2],
+            'description' => "ここにコンペの詳細を書く．魚の特性，魚が好むもの，釣れる場所・時間",
             'image_path' => 'imagepath',
-            'user_id' => 1,
             'created_at' => new DateTime(),
             'updated_at' => new DateTime(),
         ]);
