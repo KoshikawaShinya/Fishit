@@ -24,19 +24,29 @@ Route::get('/', function () {
 Route::group(['middleware' => ['auth']], function(){
     
     // 大会機能
-    Route::get('/competitions', [CompetitionController::class, 'index'])->name('competitions'); 
-    Route::get('/competitions/{competition}', [CompetitionController::class, 'show'])->name('competitions/show'); 
+    # POST
+    ROUTE::post('/competitions/store', [CompetitionController::class, 'store'])->name('competitions/store');    # 大会の登録
+    Route::post('/competitions/{competition}/posts/store', [PostController::class, 'store_in_competition'])->name('competitions/posts/store');     # 大会内での投稿
     
+    
+    # GET
+    Route::get('/competitions', [CompetitionController::class, 'index_competition'])->name('competitions'); 
+    Route::get('/competitions/create', [CompetitionController::class, 'create'])->name('competitions/create');
+    Route::get('/competitions/{competition}/posts', [CompetitionController::class, 'index_post'])->name('competitions/posts'); 
+    Route::get('/competitions/{competition}', [CompetitionController::class, 'show'])->name('competitions/show'); 
+    Route::get('/competitions/{competition}/posts/create', [PostController::class, 'create_in_competition'])->name('competitions/posts/create');
+    Route::get('/competitions/{competition}/leaderboard', [CompetitionController::class, 'leaderboard'])->name('competitions/leaderboard');
+
     
     // 投稿機能
     # POST
-    Route::post('/catches/posts', [PostController::class, 'store'])->name('store');
+    Route::post('/catches/store', [PostController::class, 'store'])->name('store');
     
     
     # GET
     Route::get('/catches', [PostController::class, 'index'])->name('catches'); 
     
-    Route::get('/catches/posts/create', [PostController::class, 'create'])->name('create');
+    Route::get('/catches/posts/create', [PostController::class, 'create'])->name('catches/create');
     
     Route::get('/catches/posts/{post}/edit', [PostController::class, 'edit']);
     // '/posts/{対象データのID}'にGetリクエストが来たら、PostControllerのshowメソッドを実行する
@@ -44,7 +54,14 @@ Route::group(['middleware' => ['auth']], function(){
     
     # PUT
     Route::put('/catches/posts/{post}', [PostController::class, 'update'])->name('catches/update');
+
+    # delete
+    Route::delete('catches/posts/{post}', [PostController::class,'delete'])->name('catches/delete');
 });
+
+Route::get('/', function () {
+    return view('welcome');
+})->name('welcome');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

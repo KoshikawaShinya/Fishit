@@ -19,7 +19,7 @@ return new class extends Migration
             $table->float("size", 8, 2);
             $table->string("place", 50);
             $table->string("image_path", 100);
-            $table->integer("competition_id")->nullable();
+            $table->foreignId('category_id')->constrained()->nullable();
             $table->integer("user_id");
             $table->timestamps();
             $table->softDeletes();

@@ -5,17 +5,24 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Competition;
+use App\Http\Requests\CompetitionRequest;
 
 class CompetitionController extends Controller
 {
-    public function index(Competition $competition)//インポートしたPostをインスタンス化して$postとして使用。
+    public function index_competition(Competition $competition)//インポートしたPostをインスタンス化して$competitionとして使用。
     {
-        //blade内で使う変数'posts'と設定。'posts'の中身にgetを使い、インスタンス化した$postを代入。
+        //blade内で使う変数'posts'と設定。'posts'の中身にgetを使い、インスタンス化した$competitionを代入。
         return view('competitions.index')->with(['competitions' => $competition->getPaginateByLimit()]);  
     }
     
+    public function index_post(Post $post, Competition $competition)//インポートしたPostをインスタンス化して$competitionとして使用。
+    {
+        //competitionで絞って投稿を表示
+        return view('competitions.index_post')->with(['posts' => $competition->getPaginateByCompetition(), 'competition' => $competition]);  
+    }
+    
     public function show(Competition $competition){
-        //'post'はbladeファイルで使う変数。中身は$postはid=1のPostインスタンス。
+        //'competition'はbladeファイルで使う変数。中身は$competitionはid=1のPostインスタンス。
         return view('competitions.show')->with(['competition' => $competition]);
     }
     
@@ -25,7 +32,7 @@ class CompetitionController extends Controller
         return view('competitions.create');
     }
     
-    public function store(Request $request, Post $post)
+    public function store(CompetitionRequest $request, Competition $competition)
     {
         # 画像のため
         $now = time();
@@ -33,14 +40,17 @@ class CompetitionController extends Controller
         $request->file('image')->storeAs('public/imgs/', $now . "_" . $file_name);
 
 
-        $input = $request['post'];
-        $post->species = $input["species"];
-        $post->size = $input["size"];
-        $post->place = $input["place"];
-        $post->image_path = 'storage/imgs/'. $now . "_" . $file_name;
-        $post->user_id = $request->user()->id;
+        $input = $request['competition'];
+        $competition->species = $input["species"];
+        $competition->description = $input["description"];
+        $competition->image_path = 'public/imgs/'. $now . "_" . $file_name;
 
-        $post->save();
-        return redirect('/catches/posts/' . $post->id);
+        $competition->save();
+        return redirect('/competitions/' . $competition->id);
+    }
+    
+    public function leaderboard(Post $post, Competition $competition)
+    {
+        return view('competitions.leaderboard')->with(['posts' => $competition->getLeaderboardPaginate(), 'competition' => $competition]);
     }
 }

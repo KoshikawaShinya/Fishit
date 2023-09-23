@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\Competition;
 use App\Http\Requests\PostRequest;
 
 class PostController extends Controller
 {
+    
     public function index(Post $post)//インポートしたPostをインスタンス化して$postとして使用。
     {
         //blade内で使う変数'posts'と設定。'posts'の中身にgetを使い、インスタンス化した$postを代入。
@@ -22,6 +24,11 @@ class PostController extends Controller
     public function create()
     {
         return view('posts.create');
+    }
+    
+    public function create_in_competition(Competition $competition)
+    {
+        return view('competitions.create_post')->with(['competition' => $competition]);
     }
     // 編集用
     public function edit(Post $post)
@@ -65,16 +72,37 @@ class PostController extends Controller
         $post->species = $input["species"];
         $post->size = $input["size"];
         $post->place = $input["place"];
-        if(is_null($request->file('image'))){
-            
-        }else{
-            $file_name = $request->file('image')->getClientOriginalName();
-            $request->file('image')->storeAs('public/imgs/', $now . "_" . $file_name);
-            $post->image_path = 'public/imgs/'. $now . "_" . $file_name;
-        }
+        $file_name = $request->file('image')->getClientOriginalName();
+        $request->file('image')->storeAs('public/imgs/', $now . "_" . $file_name);
+        $post->image_path = 'public/imgs/'. $now . "_" . $file_name;
         $post->user_id = $request->user()->id;
 
         $post->save();
-        return redirect('/catches/posts' . $post->id);
+        return redirect('/catches/posts/' . $post->id);
+    }
+    
+    public function store_in_competition(PostRequest $request, Post $post, Competition $competition)
+    {
+        # 画像のため
+        $now = time();
+
+        $input = $request['post'];
+        $post->species = $input["species"];
+        $post->size = $input["size"];
+        $post->place = $input["place"];
+        $file_name = $request->file('image')->getClientOriginalName();
+        $request->file('image')->storeAs('public/imgs/', $now . "_" . $file_name);
+        $post->image_path = 'public/imgs/'. $now . "_" . $file_name;
+        $post->competition_id = $competition->id;
+        $post->user_id = $request->user()->id;
+
+        $post->save();
+        return redirect('/catches/posts/' . $post->id);
+    }
+    
+    public function delete(Post $post)
+    {
+        $post->delete();
+        return redirect('/catches');
     }
 }

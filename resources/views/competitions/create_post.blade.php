@@ -6,11 +6,18 @@
     </head>
     <x-app-layout>
         <x-slot name="header">
-            <h1>投稿</h1>
+            <a href="/competitions/{{$competition->id}}">概要</a>
+            <a href="/competitions/{{$competition->id}}/posts">投稿一覧</a>
+            <a href='/competitions/{{$competition->id}}/leaderboard'>リーダーボード</a>
+            
+            <button class="bg-purple-400 bg-opacity-100 font-semibold py-2 px-4 rounded" onclick="'/competitions/{{$competition->id}}/posts/create'">投稿</button>
+            <!--
+            <a href='/competitions/{{$competition->id}}/posts/create'>投稿</a>
+            -->
         </x-slot>
         <body>
             <h1>Blog Name</h1>
-            <form action="/catches/store" method="POST", enctype="multipart/form-data">
+            <form action="/competitions/{{$competition->id}}/posts/store" method="POST", enctype="multipart/form-data">
                 @csrf
                 <div class="species">
                     <h2>魚種</h2>
@@ -34,7 +41,7 @@
                 <input type="submit" value="store"/>
             </form>
             <div class="footer">
-                <a href="/catches">戻る</a>
+                <a href="/competitions">戻る</a>
             </div>
         </body>
     </x-app-layout>
